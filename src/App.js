@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import Component from "./visualizations/bar";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+
+  > * {
+    margin-top: 30px;
+  }
+`;
 
 function App() {
+  const arr = Array.from({ length: 12 }, () =>
+    Math.floor(Math.random() * 10000)
+  );
+
+  const labels = [
+    "jan",
+    "fev",
+    "mar",
+    "abr",
+    "mai",
+    "jun",
+    "jul",
+    "ago",
+    "set",
+    "out",
+    "nov",
+    "dez",
+  ];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Component size="600" data={arr} color="#2a9d8f" labels={labels} />
+    </Container>
   );
 }
 
