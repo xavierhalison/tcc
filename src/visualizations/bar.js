@@ -33,6 +33,7 @@ export default function Bar({ data, size, color, labels }) {
               height={getBarHeight(value)}
               fill={color || "black"}
               id={`bar_${key}`}
+              key={key}
             />
             <text
               fill="black"
@@ -40,6 +41,7 @@ export default function Bar({ data, size, color, labels }) {
               x={getCurrentX(key) + barsWidth / 2}
               y={20}
               id={`bar_${key}_label`}
+              key={key}
             >
               {labels[key]}
             </text>
