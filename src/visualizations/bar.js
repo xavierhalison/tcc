@@ -9,6 +9,43 @@ export default function Bar({ data, size, color, labels }) {
     return [barWidth, gapSize];
   };
 
+  const Ruler = ({ min, max, maxHeight }) => {
+    const List = [];
+
+    const base = Math.pow(10, max.toString().length - 1);
+
+    for (let index = 0; index <= 10; index++) {
+      const maxBase = Math.ceil(max / base) * base;
+      const perc = ((index * 10) / 100) * maxHeight;
+      console.log(perc, maxBase);
+
+      List.push(
+        <>
+          <text
+            fill="black"
+            textAnchor="end"
+            x={-10}
+            y={((index * 10) / 100) * maxHeight * -1}
+            id={`bar_${min}_label`}
+            key={min}
+            style={{ fontFamily: "Arial", fontSize: 9 }}
+          >
+            {(((index * 10) / 100) * max).toFixed(0)}
+          </text>
+          <path
+            d={`M-5 ${((index * 10) / 100) * maxHeight * -1} L5 ${
+              ((index * 10) / 100) * maxHeight * -1
+            }`}
+            stroke="black"
+            strokeWidth="0.7"
+          />
+        </>
+      );
+    }
+
+    return List;
+  };
+
   const Bars = () => {
     const highestPeak = Math.max(...data);
     const maxSize = size * 0.8;
@@ -42,6 +79,7 @@ export default function Bar({ data, size, color, labels }) {
               y={20}
               id={`bar_${key}_label`}
               key={key}
+              style={{ fontFamily: "Arial", fontSize: 10 }}
             >
               {labels[key]}
             </text>
@@ -52,6 +90,8 @@ export default function Bar({ data, size, color, labels }) {
           stroke="black"
           strokeWidth="0.7"
         />
+        <path d={`M0 0 L0 -${maxSize}`} stroke="black" strokeWidth="0.7" />
+        <Ruler min={0} max={highestPeak} maxHeight={maxSize} />
       </g>
     );
   };
