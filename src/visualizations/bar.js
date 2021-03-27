@@ -1,97 +1,71 @@
 import React from "react";
 
 export default function Bar({ data, size, color, labels }) {
-  const getWidthOfBarsAndGaps = () => {
+  /**
+   * Todas as propriedades do ǵráfico
+   * @returns Object
+   */
+  const getChartProperties = () => {
+    // número de espaços entre as barras
     const gapNumber = data.length + 1;
-    const gapSize = (0.5 * size) / gapNumber;
-    const barWidth = (size - size * 0.1 - gapSize * gapNumber) / data.length;
 
-    return [barWidth, gapSize];
+    // largura das barras
+    const barWidth = (size * 0.5) / data.length;
+
+    // largura dos espaços entre as barras
+    const gapWidth = (size - barWidth * data.length) / gapNumber;
+
+    // valor da maior barra
+    const highestBar = Math.max(...data);
+
+    // tamanho (visual) da maior barra
+    const highestBarHeight = size * 1;
+
+    const dataNumberLength = highestBar.toString().length;
+    const baseNumber = Math.pow(10, dataNumberLength - 1);
+
+    const chartBaseValue = Math.ceil(highestBar / baseNumber) * baseNumber;
+
+    return {
+      gapNumber,
+      gapWidth,
+      barWidth,
+      highestBar,
+      highestBarHeight,
+      chartBaseValue,
+    };
   };
 
-  const Ruler = ({ min, max, maxHeight }) => {
-    const List = [];
+  const getBarHeight = (value) => {
+    const { chartBaseValue } = getChartProperties();
+    return (value * size) / chartBaseValue;
+  };
 
-    const base = Math.pow(10, max.toString().length - 1);
-
-    for (let index = 0; index <= 10; index++) {
-      const maxBase = Math.ceil(max / base) * base;
-      const perc = ((index * 10) / 100) * maxHeight;
-      console.log(perc, maxBase);
-
-      List.push(
-        <>
-          <text
-            fill="black"
-            textAnchor="end"
-            x={-10}
-            y={((index * 10) / 100) * maxHeight * -1}
-            id={`bar_${min}_label`}
-            key={min}
-            style={{ fontFamily: "Arial", fontSize: 9 }}
-          >
-            {(((index * 10) / 100) * max).toFixed(0)}
-          </text>
-          <path
-            d={`M-5 ${((index * 10) / 100) * maxHeight * -1} L5 ${
-              ((index * 10) / 100) * maxHeight * -1
-            }`}
-            stroke="black"
-            strokeWidth="0.7"
-          />
-        </>
-      );
-    }
-
-    return List;
+  const getCurrentX = (k) => {
+    const { gapWidth, barWidth } = getChartProperties();
+    return (k + 1) * gapWidth + k * barWidth;
   };
 
   const Bars = () => {
-    const highestPeak = Math.max(...data);
-    const maxSize = size * 0.8;
-    const [barsWidth, gapsWidth] = getWidthOfBarsAndGaps();
-
-    const getBarHeight = (value) => {
-      return value === highestPeak ? maxSize : (value / highestPeak) * maxSize;
-    };
-
-    const getCurrentX = (k) => {
-      return (k + 1) * gapsWidth + k * barsWidth;
-    };
+    const { barWidth } = getChartProperties();
 
     return (
-      <g transform={`translate(${size - size * 0.9}, ${size - size * 0.1})`}>
-        {data.map((value, key) => (
-          <>
+      <g transform={`translate(${0}, ${size})`}>
+        {data.map((value, key) => {
+          const barHeight = getBarHeight(value);
+
+          return (
             <rect
               x={getCurrentX(key)}
-              y={`-${getBarHeight(value)}`}
-              width={barsWidth}
-              height={getBarHeight(value)}
+              y={`-${barHeight}`}
+              width={barWidth}
+              height={barHeight}
               fill={color || "black"}
               id={`bar_${key}`}
               key={key}
             />
-            <text
-              fill="black"
-              textAnchor="middle"
-              x={getCurrentX(key) + barsWidth / 2}
-              y={20}
-              id={`bar_${key}_label`}
-              key={key}
-              style={{ fontFamily: "Arial", fontSize: 10 }}
-            >
-              {labels[key]}
-            </text>
-          </>
-        ))}
-        <path
-          d={`M0 0 L${size - size * 0.1} 0`}
-          stroke="black"
-          strokeWidth="0.7"
-        />
-        <path d={`M0 0 L0 -${maxSize}`} stroke="black" strokeWidth="0.7" />
-        <Ruler min={0} max={highestPeak} maxHeight={maxSize} />
+          );
+        })}
       </g>
     );
   };
