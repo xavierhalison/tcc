@@ -1,56 +1,44 @@
-import React from "react";
+import React, { useRef } from "react";
 
 export default function Bar({ data, size, color, labels }) {
-  /**
-   * Todas as propriedades do ǵráfico
-   * @returns Object
-   */
-  const getChartProperties = () => {
-    // número de espaços entre as barras
-    const gapNumber = data.length + 1;
+  const gapNumber = data.length + 1;
 
-    // largura das barras
-    const barWidth = (size * 0.5) / data.length;
+  // largura das barras
+  const barWidth = (size * 0.5) / data.length;
 
-    // largura dos espaços entre as barras
-    const gapWidth = (size - barWidth * data.length) / gapNumber;
+  // largura dos espaços entre as barras
+  const gapWidth = (size - barWidth * data.length) / gapNumber;
 
-    // valor da maior barra
-    const highestBar = Math.max(...data);
+  // valor da maior barra
+  const highestBar = Math.max(...data);
 
-    // tamanho (visual) da maior barra
-    const highestBarHeight = size * 1;
+  const longestLabel = labels.reduce(function (a, b) {
+    return a.length > b.length ? a : b;
+  });
 
-    const dataNumberLength = highestBar.toString().length;
-    const baseNumber = Math.pow(10, dataNumberLength - 1);
+  // tamanho (visual) da maior barra
+  const highestBarHeight = size * 1;
 
-    const chartBaseValue = Math.ceil(highestBar / baseNumber) * baseNumber;
+  const dataNumberLength = highestBar.toString().length;
+  const baseNumber = Math.pow(10, dataNumberLength - 1);
 
-    return {
-      gapNumber,
-      gapWidth,
-      barWidth,
-      highestBar,
-      highestBarHeight,
-      chartBaseValue,
-    };
-  };
+  const chartBaseValue = Math.ceil(highestBar / baseNumber) * baseNumber;
+
+  const barsArea = size - longestLabel.length * 8;
+
+  const labelsArea = size - barsArea;
 
   const getBarHeight = (value) => {
-    const { chartBaseValue } = getChartProperties();
-    return (value * size) / chartBaseValue;
+    return (value * barsArea) / chartBaseValue;
   };
 
   const getCurrentX = (k) => {
-    const { gapWidth, barWidth } = getChartProperties();
     return (k + 1) * gapWidth + k * barWidth;
   };
 
   const Bars = () => {
-    const { barWidth } = getChartProperties();
-
     return (
-      <g transform={`translate(${0}, ${size})`}>
+      <g transform={`translate(${0}, ${barsArea})`}>
         {data.map((value, key) => {
           const barHeight = getBarHeight(value);
 
@@ -70,6 +58,41 @@ export default function Bar({ data, size, color, labels }) {
     );
   };
 
+  const Labels = () => {
+    const style = {
+      fontFamily: "monospace",
+      fontSize: "10px",
+    };
+    return (
+      <g transform={`translate(${0}, ${barsArea})`}>
+        {labels.map((value, key) => {
+          const pathStart = getCurrentX(key);
+          const pathEnd = pathStart + barWidth * 0.66;
+          const hypotenuse = Math.sqrt(
+            Math.pow(labelsArea, 2) + Math.pow(barWidth * 0.66, 2)
+          );
+
+          console.log(hypotenuse);
+
+          return (
+            <>
+              <path
+                d={`M${pathStart} ${labelsArea} L${pathEnd} 0`}
+                // stroke="black"
+                id={`${key}_path`}
+              />
+              <text style={style} x={hypotenuse - 10} y="0" textAnchor="end">
+                <textPath xlinkHref={`#${key}_path`} id={`${key}_label`}>
+                  {value}
+                </textPath>
+              </text>
+            </>
+          );
+        })}
+      </g>
+    );
+  };
+
   return (
     <svg
       style={{ border: `1px solid ${color}` }}
@@ -77,6 +100,7 @@ export default function Bar({ data, size, color, labels }) {
       height={size}
       viewBox={`0 0 ${size} ${size}`}
     >
+      <Labels />
       <Bars />
     </svg>
   );
