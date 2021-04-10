@@ -16,6 +16,18 @@ function App() {
     Math.floor(Math.random() * 8000)
   );
 
+  const arr2 = Array.from({ length: 12 }, () =>
+    Math.floor(Math.random() * 8000)
+  );
+
+  const arr3 = Array.from({ length: 12 }, () =>
+    Math.floor(Math.random() * 8000)
+  );
+
+  const arr4 = Array.from({ length: 12 }, () =>
+    Math.floor(Math.random() * 8000)
+  );
+
   const labels = [
     "Janeiro de 2020",
     "Fevereiro de 2020",
@@ -34,6 +46,9 @@ function App() {
   return (
     <Container>
       <Component size="600" data={arr} color="#2a9d8f" labels={labels} />
+      <Component size="500" data={arr2} color="#2a9d8f" labels={labels} />
+      <Component size="400" data={arr3} color="#2a9d8f" labels={labels} />
+      <Component size="800" data={arr4} color="#2a9d8f" labels={labels} />
     </Container>
   );
 }

@@ -107,6 +107,16 @@ export default function Bar({ data, size, color, labels }) {
     );
   };
 
+  function generateUID() {
+    // I generate the UID from two parts here 
+    // to ensure the random number provide enough bits.
+    var firstPart = (Math.random() * 46656) | 0;
+    var secondPart = (Math.random() * 46656) | 0;
+    firstPart = ("000" + firstPart.toString(36)).slice(-3);
+    secondPart = ("000" + secondPart.toString(36)).slice(-3);
+    return firstPart + secondPart;
+  }
+
   const Labels = () => {
     return (
       <g transform={`translate(${size - chartArea}, ${barsArea + (size - chartArea)})`}>
@@ -117,14 +127,16 @@ export default function Bar({ data, size, color, labels }) {
             Math.pow(labelsArea, 2) + Math.pow(barWidth * 0.66, 2)
           );
 
+          const uid = generateUID();
+
           return (
             <React.Fragment key={key}>
               <path
                 d={`M${pathStart} ${labelsArea} L${pathEnd} 0`}
-                id={`${key}_path`}
+                id={`${uid}`}
               />
               <text style={fontStyle} x={hypotenuse - 10} y="0" textAnchor="end">
-                <textPath xlinkHref={`#${key}_path`} key={`${key}_label`}>
+                <textPath xlinkHref={`#${uid}`} key={`${key}_label`}>
                   {value}
                 </textPath>
               </text>
@@ -137,7 +149,6 @@ export default function Bar({ data, size, color, labels }) {
 
   return (
     <svg
-      style={{ border: `1px solid ${color}` }}
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
