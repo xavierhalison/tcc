@@ -13,7 +13,7 @@ const Container = styled.div`
 
 function App() {
   const arr = Array.from({ length: 12 }, () =>
-    Math.floor(Math.random() * 10000)
+    Math.floor(Math.random() * 8000)
   );
 
   const labels = [
