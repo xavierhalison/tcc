@@ -42,6 +42,29 @@ export default function Bar({ data, size, color, labels }) {
 
   const [focusedBar, setFocusedBar] = useState(null);
 
+  const GetFocusedBar = () => {
+    if (!focusedBar) {
+      return <></>;
+    }
+
+    const value = data[focusedBar];
+    const barHeight = getBarHeight(value);
+
+    return (
+      <g transform={`translate(${size - chartArea}, ${barsArea + (size - chartArea)})`}>
+        <rect x={getCurrentX(focusedBar) - 7}
+          y={`-${barHeight + 20}`}
+          width={40}
+          height={20}
+          fill="white"
+          stroke="black">
+        </rect>
+        <text style={fontStyle} x={`${getCurrentX(focusedBar)}`} y={-(barHeight + 5)} textAnchor="start">{value}</text>
+        <path d={`M${getCurrentX(focusedBar)} -${barHeight} L0 -${barHeight}`} stroke={color} strokeDasharray="2,3" />
+      </g>
+    )
+  }
+
   const Bars = () => {
 
     const Marks = () => {
@@ -68,7 +91,7 @@ export default function Bar({ data, size, color, labels }) {
     }
 
     const focusBar = (key, e) => {
-      setFocusedBar(key)
+      setFocusedBar(key);
     }
 
     return (
@@ -81,6 +104,12 @@ export default function Bar({ data, size, color, labels }) {
 
             return (
               <>
+                {/* {focusedBar === key && (
+                  <path d={`M${getCurrentX(key)} -${barHeight} L0 -${barHeight}`} stroke={color} strokeDasharray="2,3" />
+                )}
+                {focusedBar === key && (
+                  <text style={fontStyle} x={`${getCurrentX(key)}`} y={-(barHeight + 5)} textAnchor="start">{value}</text>
+                )} */}
                 <rect
                   x={getCurrentX(key)}
                   y={`-${barHeight}`}
@@ -93,12 +122,6 @@ export default function Bar({ data, size, color, labels }) {
                   onMouseOut={() => setFocusedBar(null)}
                   stroke={focusedBar === key ? "black" : "transparent"}
                 />
-                {focusedBar === key && (
-                  <path d={`M${getCurrentX(key)} -${barHeight} L0 -${barHeight}`} stroke={color} strokeDasharray="2,3" />
-                )}
-                {focusedBar === key && (
-                  <text style={fontStyle} x={`${getCurrentX(key)}`} y={-(barHeight + 5)} textAnchor="start">{value}</text>
-                )}
               </>
             );
           })}
@@ -155,6 +178,7 @@ export default function Bar({ data, size, color, labels }) {
     >
       <Labels />
       <Bars />
+      <GetFocusedBar />
     </svg>
   );
 }
