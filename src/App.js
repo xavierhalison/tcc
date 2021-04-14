@@ -101,7 +101,7 @@ function App() {
       <Component size="600" data={arr} color="#2a9d8f" labels={labels} />
       <Component size="500" data={arr2} color="#2a9d8f" labels={labels} />
       <Component size="400" data={arr3} color="#2a9d8f" labels={labels} />
-      <Component size="600" data={arr4} color="#2a9d8f" labels={labels2} />
+      <Component size="700" data={arr4} color="#2a9d8f" labels={labels2} />
     </Container>
   );
 }

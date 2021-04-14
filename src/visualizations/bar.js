@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { generateUID } from "../utils/helpers";
 
 export default function Bar({ data, size, color, labels }) {
   const chartArea = size * 0.9;
@@ -49,6 +50,7 @@ export default function Bar({ data, size, color, labels }) {
 
     const value = data[focusedBar];
     const barHeight = getBarHeight(value);
+    const x = getCurrentX(focusedBar);
 
     return (
       <g transform={`translate(${size - chartArea}, ${barsArea + (size - chartArea)})`}>
@@ -59,40 +61,42 @@ export default function Bar({ data, size, color, labels }) {
           fill="white"
           stroke="black">
         </rect>
-        <text style={fontStyle} x={`${getCurrentX(focusedBar)}`} y={-(barHeight + 5)} textAnchor="start">{value}</text>
-        <path d={`M${getCurrentX(focusedBar)} -${barHeight} L0 -${barHeight}`} stroke={color} strokeDasharray="2,3" />
+        <text style={fontStyle} x={`${x}`} y={-(barHeight + 5)} textAnchor="start">{value}</text>
+        <path d={`M${x} -${barHeight} L0 -${barHeight}`} stroke={color} strokeDasharray="2,3" />
       </g>
     )
   }
 
-  const Bars = () => {
+  const Marks = () => {
 
-    const Marks = () => {
+    const marks = [];
 
-      const marks = [];
-      for (let index = 0; index < chartBaseValue; index += (chartBaseValue / 10)) {
-        const markX = index === 0 ? chartArea : "5";
-        marks.push(
-          <>
-            <text style={fontStyle} x="-10" y={-getBarHeight(index) + 3} textAnchor="end">{index}</text>
-            <path d={`M-5 -${getBarHeight(index)} L${markX} -${getBarHeight(index)}`} stroke="black" />
-          </>
-        )
-      }
+    for (let index = 0; index < chartBaseValue; index += (chartBaseValue / 10)) {
+
+      const markX = index === 0 ? chartArea : 0;
+      const barHeight = getBarHeight(index);
 
       marks.push(
         <>
-          <text style={fontStyle} x="-10" y={-getBarHeight(chartBaseValue) + 3} textAnchor="end">{chartBaseValue}</text>
-          <path d={`M-5 -${getBarHeight(chartBaseValue)} L5 -${getBarHeight(chartBaseValue)}`} stroke="black" />
+          <text style={fontStyle} x="-10" y={-barHeight + 3} textAnchor="end">{index}</text>
+          <path d={`M-5 -${barHeight} L${markX} -${barHeight}`} stroke="black" />
         </>
-      );
-
-      return marks;
+      )
     }
 
-    const focusBar = (key, e) => {
-      setFocusedBar(key);
-    }
+    const baseHeight = getBarHeight(chartBaseValue);
+
+    marks.push(
+      <>
+        <text style={fontStyle} x="-10" y={-baseHeight + 3} textAnchor="end">{chartBaseValue}</text>
+        <path d={`M-5 -${baseHeight} L5 -${baseHeight}`} stroke="black" />
+      </>
+    );
+
+    return marks;
+  }
+
+  const Bars = () => {
 
     return (
       <>
@@ -104,12 +108,6 @@ export default function Bar({ data, size, color, labels }) {
 
             return (
               <>
-                {/* {focusedBar === key && (
-                  <path d={`M${getCurrentX(key)} -${barHeight} L0 -${barHeight}`} stroke={color} strokeDasharray="2,3" />
-                )}
-                {focusedBar === key && (
-                  <text style={fontStyle} x={`${getCurrentX(key)}`} y={-(barHeight + 5)} textAnchor="start">{value}</text>
-                )} */}
                 <rect
                   x={getCurrentX(key)}
                   y={`-${barHeight}`}
@@ -118,7 +116,7 @@ export default function Bar({ data, size, color, labels }) {
                   fill={color || "black"}
                   id={`bar_${key}`}
                   key={key}
-                  onMouseOver={(e) => focusBar(key, e)}
+                  onMouseOver={() => setFocusedBar(key)}
                   onMouseOut={() => setFocusedBar(null)}
                   stroke={focusedBar === key ? "black" : "transparent"}
                 />
@@ -130,24 +128,14 @@ export default function Bar({ data, size, color, labels }) {
     );
   };
 
-  function generateUID() {
-    // I generate the UID from two parts here 
-    // to ensure the random number provide enough bits.
-    var firstPart = (Math.random() * 46656) | 0;
-    var secondPart = (Math.random() * 46656) | 0;
-    firstPart = ("000" + firstPart.toString(36)).slice(-3);
-    secondPart = ("000" + secondPart.toString(36)).slice(-3);
-    return firstPart + secondPart;
-  }
-
   const Labels = () => {
     return (
       <g transform={`translate(${size - chartArea}, ${barsArea + (size - chartArea)})`}>
         {labels.map((value, key) => {
           const pathStart = getCurrentX(key);
-          const pathEnd = pathStart + barWidth * 0.66;
+          const pathEnd = pathStart + barWidth;
           const hypotenuse = Math.sqrt(
-            Math.pow(labelsArea, 2) + Math.pow(barWidth * 0.66, 2)
+            Math.pow(labelsArea, 2) + Math.pow(barWidth, 2)
           );
 
           const uid = generateUID();
