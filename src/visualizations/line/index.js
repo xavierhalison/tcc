@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import LineChartContext from "./context";
 
 import Labels from "./labels";
 import Rulers from "./rulers";
 import LineGroup from "./lines";
+import InfoHover from "./hoverInfo";
 
 export default function LineChart({ size, datasets, labels, colors }) {
+  const [hoverInfo, setHoverInfo] = useState(null);
+
   const getHighestValue = () => {
     const allSets = [];
 
@@ -40,6 +43,8 @@ export default function LineChart({ size, datasets, labels, colors }) {
     topLimit,
     datasets,
     colors,
+    hoverInfo,
+    setHoverInfo,
   };
 
   return (
@@ -53,6 +58,7 @@ export default function LineChart({ size, datasets, labels, colors }) {
         <Rulers />
         <Labels />
         <LineGroup />
+        {hoverInfo && <InfoHover />}
       </svg>
     </LineChartContext.Provider>
   );

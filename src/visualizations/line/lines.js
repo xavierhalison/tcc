@@ -9,6 +9,8 @@ const Line = ({ line, color }) => {
     topBorderDistance,
     yAxisSize,
     topLimit,
+    setHoverInfo,
+    fontStyle,
   } = useContext(LineChartContext);
 
   const dotXBase = xAxisSize / (labels.length - 1);
@@ -36,7 +38,21 @@ const Line = ({ line, color }) => {
                 stroke={color}
               />
             )}
-            <circle cx={getX(key)} cy={-getY(l)} r="3" fill={color}>
+            <circle
+              cx={getX(key)}
+              cy={-getY(l)}
+              r="5"
+              fill={color}
+              onMouseOver={() =>
+                setHoverInfo({
+                  x: getX(key),
+                  y: getY(l),
+                  fontStyle: fontStyle,
+                  value: l,
+                })
+              }
+              onMouseOut={() => setHoverInfo(null)}
+            >
               {l}
             </circle>
           </React.Fragment>
