@@ -13,21 +13,38 @@ const Container = styled.div`
 
 Array.from({ length: 40 }, () => Math.floor(Math.random() * 40));
 
-
 const datasets = [
   Array.from({ length: 12 }, () => Math.floor(Math.random() * 1000)),
   Array.from({ length: 12 }, () => Math.floor(Math.random() * 1000)),
   Array.from({ length: 12 }, () => Math.floor(Math.random() * 1000)),
 ];
 
-const labels = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+const labels = [
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+];
 
-const colors = ["#071013", "#EB5160", "#b7999c"];
+const colors = ["#501a66", "#a37603", "#045e45"];
 
 function App() {
   return (
     <Container>
-      <Component size="600" datasets={datasets} labels={labels} colors={colors} />
+      <Component
+        size="600"
+        datasets={datasets}
+        labels={labels}
+        colors={colors}
+      />
     </Container>
   );
 }
