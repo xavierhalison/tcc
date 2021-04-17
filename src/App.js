@@ -11,18 +11,23 @@ const Container = styled.div`
   }
 `;
 
+Array.from({ length: 40 }, () => Math.floor(Math.random() * 40));
+
+
 const datasets = [
-  [15, 20, 30],
-  [10, 286, 13],
-  [7, 23, 75],
+  Array.from({ length: 12 }, () => Math.floor(Math.random() * 1000)),
+  Array.from({ length: 12 }, () => Math.floor(Math.random() * 1000)),
+  Array.from({ length: 12 }, () => Math.floor(Math.random() * 1000)),
 ];
 
-const labels = ["Janeiro", "Fevereiro", "Março"];
+const labels = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+
+const colors = ["#071013", "#EB5160", "#b7999c"];
 
 function App() {
   return (
     <Container>
-      <Component size="600" datasets={datasets} labels={labels} />
+      <Component size="600" datasets={datasets} labels={labels} colors={colors} />
     </Container>
   );
 }
