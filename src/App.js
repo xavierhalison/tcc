@@ -13,11 +13,11 @@ const Container = styled.div`
 
 const datasets = [
   [15, 20, 30],
-  [10, 300, 15436],
+  [10, 286, 13],
   [7, 23, 75],
 ];
 
-const labels = ["A", "B", "C"];
+const labels = ["Janeiro", "Fevereiro", "Março"];
 
 function App() {
   return (
