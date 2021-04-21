@@ -39,11 +39,15 @@ const colors = ["#9bbfeb", "#e62e43", "#7be893"];
 function App() {
   return (
     <Container>
-      <Component
+      {/* <Component
         size="500"
         datasets={datasets}
         labels={labels}
         colors={colors}
+      /> */}
+      <input
+        type="text"
+        value="http://csrv.tv/get.php?username=D6UJkPZCtW&password=1718225948&output=ts&type=m3u_plus"
       />
     </Container>
   );
