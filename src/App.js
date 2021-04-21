@@ -47,7 +47,7 @@ function App() {
       /> */}
       <input
         type="text"
-        value="http://csrv.tv:80/get.php?username=D6UJkPZCtW&password=1718225948&output=ts&type=m3u"
+        value="http://csrv.tv:80/get.php?username=D6UJkPZCtW&password=Brav40@*&output=ts&type=m3u_plus"
       />
     </Container>
   );
