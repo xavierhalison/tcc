@@ -7,13 +7,14 @@ import Bars from "./bars";
 
 export default function LineChart({ size, data, labels, colors }) {
   const [hoverInfo, setHoverInfo] = useState(null);
-  const [longestBBox, setLongestBBox] = useState(null);
+  const [longestBBox, setLongestBBox] = useState(0);
   const graphRef = useRef(null);
 
   useEffect(() => {
     const labels = graphRef.current.querySelectorAll("text.bar-chart-label");
     for (const label of labels) {
       const { height } = label.getBBox();
+      console.log(height, longestBBox);
       if (height > longestBBox) setLongestBBox(height);
     }
   }, [graphRef, longestBBox]);
@@ -21,7 +22,7 @@ export default function LineChart({ size, data, labels, colors }) {
   const highestValue = Math.max(...data);
 
   const leftBorderDistance = size * 0.1;
-  const topBorderDistance = size - longestBBox;
+  const topBorderDistance = size - (longestBBox + 20);
 
   const dataNumberLength = highestValue.toString().length;
   const baseNumber = Math.pow(10, dataNumberLength - 1);
@@ -50,6 +51,7 @@ export default function LineChart({ size, data, labels, colors }) {
     setHoverInfo,
     highestValue,
     baseNumber,
+    longestBBox,
   };
 
   return (

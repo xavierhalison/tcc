@@ -17,7 +17,7 @@ const Labels = () => {
 
   return (
     <g
-      transform={`translate(${leftBorderDistance + 8}, ${size})`}
+      transform={`translate(${leftBorderDistance + 8}, ${size - 10})`}
       ref={labelsRef}
     >
       {labels.map((label, key) => {
@@ -26,13 +26,12 @@ const Labels = () => {
         return (
           <>
             <path
-              d={`M${currentX + 5} ${0} L${currentX + 5} -47`}
+              d={`M${currentX + 5} ${0} L${currentX + 5} -100%`}
               id={`${key}_bar`}
-              stroke="black"
             />
             <text
               style={fontStyle}
-              x={47}
+              x={"53"}
               y="0"
               textAnchor="end"
               className="bar-chart-label"
@@ -42,16 +41,6 @@ const Labels = () => {
               </textPath>
             </text>
           </>
-          // <text
-          //   style={fontStyle}
-          //   x={currentX}
-          //   y="-30"
-          //   textAnchor="middle"
-          //   key={`label_${key}`}
-          //   className={"bar-chart-label"}
-          // >
-          //   {label}
-          // </text>
         );
       })}
     </g>
