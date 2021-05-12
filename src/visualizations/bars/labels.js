@@ -32,8 +32,6 @@ const Labels = () => {
     return bbox;
   };
 
-  console.log(calcTextSize(), "aki");
-
   return (
     <g
       transform={`translate(${leftBorderDistance + 8}, ${size - 10})`}
