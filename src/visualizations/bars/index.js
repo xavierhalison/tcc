@@ -14,7 +14,6 @@ export default function LineChart({ size, data, labels, colors }) {
     const labels = graphRef.current.querySelectorAll("text.bar-chart-label");
     for (const label of labels) {
       const { height } = label.getBBox();
-      console.log(height, longestBBox);
       if (height > longestBBox) setLongestBBox(height);
     }
   }, [graphRef, longestBBox]);

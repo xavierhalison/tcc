@@ -12,14 +12,6 @@ const Rulers = () => {
     topLimit,
   } = useContext(LineChartContext);
 
-  console.log(
-    leftBorderDistance,
-    topBorderDistance,
-    xAxisSize,
-    yAxisSize,
-    topLimit
-  );
-
   return (
     <g transform={`translate(${leftBorderDistance}, ${topBorderDistance})`}>
       <path d={`M0 0 L0 -${yAxisSize} Z`} stroke="black" />
